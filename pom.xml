@@ -11,6 +11,8 @@
     <modules>
         <module>rabbitmq-demo-consumer</module>
         <module>rabbitmq-demo-publisher</module>
+        <module>kafkamessage</module>
+        <module>springbootkafka</module>
     </modules>
 
     <properties>
