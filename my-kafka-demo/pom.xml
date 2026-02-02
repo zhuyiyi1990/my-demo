@@ -8,7 +8,7 @@
     </parent>
 
     <artifactId>my-kafka-demo</artifactId>
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
 
     <name>my-kafka-demo</name>
     <url>http://maven.apache.org</url>
@@ -18,8 +18,8 @@
     </properties>
 
     <modules>
-        <module>kafka</module>
-        <module>springboot-kafka</module>
+        <module>my-kafka-message</module>
+        <module>my-spring-boot-kafka</module>
     </modules>
 
     <dependencies>

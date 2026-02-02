@@ -1,0 +1,65 @@
+## 默认由Git决定文件是不是文本文件，换行符为LF
+* text=auto eol=lf
+
+## 已知的文件扩展名，防止Git判断错误
+# 文本文件（可参考Xftp）
+*.asp text eol=lf
+*.bashrc text eol=lf
+*.bat text eol=lf
+*.c text eol=lf
+*.cbl text eol=lf
+*.cer text eol=lf
+*.cgi text eol=lf
+*.cpp text eol=lf
+*.css text eol=lf
+*.gradle text eol=lf
+*.h text eol=lf
+*.hpp text eol=lf
+*.htm text eol=lf
+*.html text eol=lf
+*.ini text eol=lf
+*.java text eol=lf
+*.js text eol=lf
+*.log text eol=lf
+*.mak text eol=lf
+*.md text eol=lf
+*.php text eol=lf
+*.php3 text eol=lf
+*.pl text eol=lf
+*.properties text eol=lf
+*.py text eol=lf
+*.sh text eol=lf
+*.shtml text eol=lf
+*.sql text eol=lf
+*.svg text eol=lf
+*.txt text eol=lf
+*.xml text eol=lf
+*.xsl text eol=lf
+*.yaml text eol=lf
+*.yml text eol=lf
+
+# 二进制文件
+*.doc binary
+*.docx binary
+*.gif binary
+*.jar binary
+*.jpeg binary
+*.jpg binary
+*.mkv binary
+*.mp3 binary
+*.mp4 binary
+*.multipart binary
+*.pdf binary
+*.png binary
+*.ppt binary
+*.pptx binary
+*.rar binary
+*.rmvb binary
+*.tar binary
+*.tar.gz binary
+*.vsd binary
+*.webp binary
+*.xls binary
+*.xlsx binary
+*.xmind binary
+*.zip binary
