@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  redis:
+    image: redis:latest
+    container_name: my-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - /home/zhuyiyi/docker-volume/redis/data:/data
+      - /home/zhuyiyi/docker-volume/redis/conf:/etc/redis
+    command: redis-server /etc/redis/redis.conf
+    environment:
+      - TZ=Asia/Shanghai  # 可选：设置时区
