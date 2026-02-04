@@ -8,7 +8,7 @@
     </parent>
 
     <artifactId>my-redis-demo</artifactId>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
 
     <name>my-redis-demo</name>
     <url>http://maven.apache.org</url>
@@ -21,6 +21,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
