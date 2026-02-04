@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   redis:
-    image: redis:latest
+    image: redis:5.0.9
     container_name: my-redis
     ports:
       - "6379:6379"
