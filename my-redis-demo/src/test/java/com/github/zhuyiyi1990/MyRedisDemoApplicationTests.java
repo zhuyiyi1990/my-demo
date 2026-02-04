@@ -113,4 +113,9 @@ class MyRedisDemoApplicationTests {
         // TODO
     }
 
+    @Test
+    void testTransaction() {
+        // TODO
+    }
+
 }
