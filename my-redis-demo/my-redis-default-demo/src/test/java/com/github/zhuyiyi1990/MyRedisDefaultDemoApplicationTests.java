@@ -4,6 +4,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
+import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.*;
 
 import java.util.List;
@@ -35,6 +38,19 @@ class MyRedisDefaultDemoApplicationTests {
     @Test
     void testIfTwoRedisTemplateIsOne() {
         System.out.println(Objects.equals(redisTemplate, stringRedisTemplate));
+    }
+
+    @Test
+    void testCheckConnectionType() {
+        RedisConnectionFactory connectionFactory = redisTemplate.getConnectionFactory();
+        if (connectionFactory instanceof JedisConnectionFactory) {
+            System.out.println("=== 当前使用的是 Jedis 客户端 ===");
+        } else if (connectionFactory instanceof LettuceConnectionFactory) {
+            System.out.println("=== 当前使用的是 Lettuce 客户端 ===");
+        } else {
+            System.out.println("=== 未知的Redis客户端 ===");
+            System.out.println("类名: " + connectionFactory.getClass().getName());
+        }
     }
 
     // 数据类型：String
@@ -129,10 +145,42 @@ class MyRedisDefaultDemoApplicationTests {
         sortedSetOperations.add(key, "hello1", 5);
     }
 
-    // 数据类型：Bitmap
+    /*
+     * 数据类型：Bitmap
+     * bitmap1 -> 11011100
+     * bitmap2 -> 01001010
+     */
     @Test
     void testBitmap() {
-        // TODO
+        redisTemplate.delete("bitmap1");
+        redisTemplate.delete("bitmap2");
+        ValueOperations<Object, Object> valueOperations = redisTemplate.opsForValue();
+        valueOperations.setBit("bitmap1", 2, true);
+        valueOperations.setBit("bitmap1", 3, true);
+        valueOperations.setBit("bitmap1", 4, true);
+        valueOperations.setBit("bitmap1", 6, true);
+        valueOperations.setBit("bitmap1", 7, true);
+        valueOperations.setBit("bitmap2", 1, true);
+        valueOperations.setBit("bitmap2", 3, true);
+        valueOperations.setBit("bitmap2", 6, true);
+        for (int i = 1; i <= 2; i++) {
+            int num = 0;
+            for (int j = 0; j < 8; j++) {
+                Boolean bit = valueOperations.getBit("bitmap" + i, j);
+                if (Objects.equals(bit, Boolean.TRUE)) {
+                    num = num | (1 << j);
+                }
+            }
+            System.out.format("bitmap%d -> %s\n", i, String.format("%8s", Integer.toBinaryString(num)).replace(' ', '0'));
+        }
+        Long count = redisTemplate.execute((RedisCallback<Long>) connection ->
+                connection.bitCount("bitmap1".getBytes())
+        );
+        System.out.println("bitmap1 count = " + count);
+        count = redisTemplate.execute((RedisCallback<Long>) connection ->
+                connection.bitCount("bitmap2".getBytes())
+        );
+        System.out.println("bitmap2 count = " + count);
     }
 
     @Test

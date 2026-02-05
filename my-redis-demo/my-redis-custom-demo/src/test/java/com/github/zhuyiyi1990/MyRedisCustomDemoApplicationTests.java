@@ -5,6 +5,9 @@ import com.github.zhuyiyi1990.pojo.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
+import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.*;
 
 import java.math.BigDecimal;
@@ -28,6 +31,19 @@ class MyRedisCustomDemoApplicationTests {
     @Test
     void testIfTwoRedisTemplateIsOne() {
         System.out.println(Objects.equals(redisTemplate, stringRedisTemplate));
+    }
+
+    @Test
+    void testCheckConnectionType() {
+        RedisConnectionFactory connectionFactory = redisTemplate.getConnectionFactory();
+        if (connectionFactory instanceof JedisConnectionFactory) {
+            System.out.println("=== 当前使用的是 Jedis 客户端 ===");
+        } else if (connectionFactory instanceof LettuceConnectionFactory) {
+            System.out.println("=== 当前使用的是 Lettuce 客户端 ===");
+        } else {
+            System.out.println("=== 未知的Redis客户端 ===");
+            System.out.println("类名: " + connectionFactory.getClass().getName());
+        }
     }
 
     // 把对象保存为String类型
