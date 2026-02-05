@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: my-redis-custom-demo
+  redis:
+    host: 10.38.0.61
+    port: 6479
+    database: 0
+    password: password

@@ -4,9 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.data.redis.core.ZSetOperations;
+import org.springframework.data.redis.core.*;
 
 import java.util.List;
 import java.util.Map;
@@ -43,8 +41,9 @@ class MyRedisDefaultDemoApplicationTests {
     @Test
     void testString() {
         final String key = "helloString";
-        stringRedisTemplate.opsForValue().set(key, "world");
-        String helloString = stringRedisTemplate.opsForValue().get(key);
+        ValueOperations<String, String> valueOperations = stringRedisTemplate.opsForValue();
+        valueOperations.set(key, "world");
+        String helloString = valueOperations.get(key);
         System.out.println("helloString = " + helloString);
     }
 
@@ -52,10 +51,11 @@ class MyRedisDefaultDemoApplicationTests {
     @Test
     void testHash() {
         final String key = "helloHash";
-        stringRedisTemplate.opsForHash().put(key, "hello1", "world1");
-        stringRedisTemplate.opsForHash().put(key, "hello2", "world2");
-        stringRedisTemplate.opsForHash().put(key, "hello3", "world3");
-        Map<Object, Object> helloHash = stringRedisTemplate.opsForHash().entries(key);
+        HashOperations<String, Object, Object> hashOperations = stringRedisTemplate.opsForHash();
+        hashOperations.put(key, "hello1", "world1");
+        hashOperations.put(key, "hello2", "world2");
+        hashOperations.put(key, "hello3", "world3");
+        Map<Object, Object> helloHash = hashOperations.entries(key);
         System.out.println(helloHash);
     }
 
@@ -66,34 +66,37 @@ class MyRedisDefaultDemoApplicationTests {
         final String key = "helloList";
         stringRedisTemplate.delete(key);
         prepareListData(key);
+        ListOperations<String, String> listOperations = stringRedisTemplate.opsForList();
         while (true) {
-            String hello = stringRedisTemplate.opsForList().leftPop(key);
+            String hello = listOperations.leftPop(key);
             if (StringUtils.isBlank(hello)) {
                 break;
             }
             System.out.println(hello);
         }
         prepareListData(key);
-        Long size = stringRedisTemplate.opsForList().size(key);
-        List<String> helloList = stringRedisTemplate.opsForList().range(key, 0, size - 1);
+        Long size = listOperations.size(key);
+        List<String> helloList = listOperations.range(key, 0, size - 1);
         System.out.println("helloList = " + helloList);
     }
 
     private void prepareListData(final String key) {
-        stringRedisTemplate.opsForList().leftPush(key, "1");
-        stringRedisTemplate.opsForList().rightPush(key, "2");
-        stringRedisTemplate.opsForList().leftPush(key, "3");
-        stringRedisTemplate.opsForList().rightPush(key, "4");
-        stringRedisTemplate.opsForList().leftPush(key, "5");
+        ListOperations<String, String> listOperations = stringRedisTemplate.opsForList();
+        listOperations.leftPush(key, "1");
+        listOperations.rightPush(key, "2");
+        listOperations.leftPush(key, "3");
+        listOperations.rightPush(key, "4");
+        listOperations.leftPush(key, "5");
     }
 
     // 数据类型：Set
     @Test
     void testSet() {
         final String key = "helloSet";
-        stringRedisTemplate.opsForSet().add(key, "hello1", "hello2", "hello3");
-        stringRedisTemplate.opsForSet().add(key, "hello1", "hello2", "hello3");
-        Set<String> helloSet = stringRedisTemplate.opsForSet().members(key);
+        SetOperations<String, String> setOperations = stringRedisTemplate.opsForSet();
+        setOperations.add(key, "hello1", "hello2", "hello3");
+        setOperations.add(key, "hello1", "hello2", "hello3");
+        Set<String> helloSet = setOperations.members(key);
         System.out.println("helloSet = " + helloSet);
     }
 
@@ -103,25 +106,27 @@ class MyRedisDefaultDemoApplicationTests {
         final String key = "helloSortedSet";
         stringRedisTemplate.delete(key);
         prepareSortedSetData(key);
+        ZSetOperations<String, String> sortedSetOperations = stringRedisTemplate.opsForZSet();
         while (true) {
-            ZSetOperations.TypedTuple<String> hello = stringRedisTemplate.opsForZSet().popMax(key);
+            ZSetOperations.TypedTuple<String> hello = sortedSetOperations.popMax(key);
             if (Objects.isNull(hello)) {
                 break;
             }
             System.out.println(hello.getScore() + "->" + hello.getValue());
         }
         prepareSortedSetData(key);
-        Long size = stringRedisTemplate.opsForZSet().size(key);
-        Set<String> set = stringRedisTemplate.opsForZSet().range(key, 0, size - 1);
+        Long size = sortedSetOperations.size(key);
+        Set<String> set = sortedSetOperations.range(key, 0, size - 1);
         System.out.println(set);
     }
 
     private void prepareSortedSetData(final String key) {
-        stringRedisTemplate.opsForZSet().add(key, "hello3", 1);
-        stringRedisTemplate.opsForZSet().add(key, "hello4", 2);
-        stringRedisTemplate.opsForZSet().add(key, "hello2", 3);
-        stringRedisTemplate.opsForZSet().add(key, "hello5", 4);
-        stringRedisTemplate.opsForZSet().add(key, "hello1", 5);
+        ZSetOperations<String, String> sortedSetOperations = stringRedisTemplate.opsForZSet();
+        sortedSetOperations.add(key, "hello3", 1);
+        sortedSetOperations.add(key, "hello4", 2);
+        sortedSetOperations.add(key, "hello2", 3);
+        sortedSetOperations.add(key, "hello5", 4);
+        sortedSetOperations.add(key, "hello1", 5);
     }
 
     // 数据类型：Bitmap

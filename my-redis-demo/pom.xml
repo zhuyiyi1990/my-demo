@@ -11,14 +11,16 @@
     <packaging>pom</packaging>
 
     <name>my-redis-demo</name>
-    <url>http://maven.apache.org</url>
     <modules>
         <module>my-redis-default-demo</module>
         <module>my-redis-custom-demo</module>
     </modules>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+    </dependencies>
 
 </project>
