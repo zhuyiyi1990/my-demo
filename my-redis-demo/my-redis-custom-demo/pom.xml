@@ -3,22 +3,20 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.github.zhuyiyi1990</groupId>
-        <artifactId>my-demo</artifactId>
+        <artifactId>my-redis-demo</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>my-redis-demo</artifactId>
-    <packaging>pom</packaging>
+    <artifactId>my-redis-custom-demo</artifactId>
+    <packaging>jar</packaging>
 
-    <name>my-redis-demo</name>
+    <name>my-redis-custom-demo</name>
     <url>http://maven.apache.org</url>
-    <modules>
-        <module>my-redis-default-demo</module>
-        <module>my-redis-custom-demo</module>
-    </modules>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <dependencies>
+    </dependencies>
 </project>

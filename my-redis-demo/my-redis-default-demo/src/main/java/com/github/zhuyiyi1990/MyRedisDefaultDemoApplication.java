@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class MyRedisDemoApplication {
+public class MyRedisDefaultDemoApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(MyRedisDemoApplication.class, args);
+        SpringApplication.run(MyRedisDefaultDemoApplication.class, args);
     }
 
 }

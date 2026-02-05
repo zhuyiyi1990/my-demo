@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
 
@@ -13,13 +14,29 @@ import java.util.Objects;
 import java.util.Set;
 
 @SpringBootTest
-class MyRedisDemoApplicationTests {
+class MyRedisDefaultDemoApplicationTests {
+
+    /*
+     * 默认配置的话会报错
+     * No qualifying bean of type 'org.springframework.data.redis.core.RedisTemplate<java.lang.String, java.lang.Object>' available: expected at least 1 bean which qualifies as autowire candidate.
+     */
+    /*@Autowired
+    private RedisTemplate<String, Object> redisTemplate;*/
+
+    @Autowired
+    private RedisTemplate<Object, Object> redisTemplate;
 
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
     @Test
     void contextLoads() {
+    }
+
+    // 测试两个RedisTemplate是否是同一个对象
+    @Test
+    void testIfTwoRedisTemplateIsOne() {
+        System.out.println(Objects.equals(redisTemplate, stringRedisTemplate));
     }
 
     // 数据类型：String

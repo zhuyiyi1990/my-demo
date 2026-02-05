@@ -1,6 +1,6 @@
 spring:
   application:
-    name: my-redis-demo
+    name: my-redis-default-demo
   redis:
     host: 10.38.0.61
     port: 6479
