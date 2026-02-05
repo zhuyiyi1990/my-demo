@@ -173,6 +173,7 @@ class MyRedisDefaultDemoApplicationTests {
             }
             System.out.format("bitmap%d -> %s\n", i, String.format("%8s", Integer.toBinaryString(num)).replace(' ', '0'));
         }
+
         Long count = redisTemplate.execute((RedisCallback<Long>) connection ->
                 connection.bitCount("bitmap1".getBytes())
         );
