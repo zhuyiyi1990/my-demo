@@ -9,6 +9,7 @@ import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.*;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -152,9 +153,9 @@ class MyRedisDefaultDemoApplicationTests {
      */
     @Test
     void testBitmap() {
-        redisTemplate.delete("bitmap1");
-        redisTemplate.delete("bitmap2");
-        ValueOperations<Object, Object> valueOperations = redisTemplate.opsForValue();
+        stringRedisTemplate.delete("bitmap1");
+        stringRedisTemplate.delete("bitmap2");
+        ValueOperations<String, String> valueOperations = stringRedisTemplate.opsForValue();
         valueOperations.setBit("bitmap1", 2, true);
         valueOperations.setBit("bitmap1", 3, true);
         valueOperations.setBit("bitmap1", 4, true);
@@ -174,12 +175,12 @@ class MyRedisDefaultDemoApplicationTests {
             System.out.format("bitmap%d -> %s\n", i, String.format("%8s", Integer.toBinaryString(num)).replace(' ', '0'));
         }
 
-        Long count = redisTemplate.execute((RedisCallback<Long>) connection ->
-                connection.bitCount("bitmap1".getBytes())
+        Long count = stringRedisTemplate.execute((RedisCallback<Long>) connection ->
+                connection.bitCount("bitmap1".getBytes(StandardCharsets.UTF_8))
         );
         System.out.println("bitmap1 count = " + count);
-        count = redisTemplate.execute((RedisCallback<Long>) connection ->
-                connection.bitCount("bitmap2".getBytes())
+        count = stringRedisTemplate.execute((RedisCallback<Long>) connection ->
+                connection.bitCount("bitmap2".getBytes(StandardCharsets.UTF_8))
         );
         System.out.println("bitmap2 count = " + count);
     }
