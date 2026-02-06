@@ -205,6 +205,16 @@ class MyRedisDefaultDemoApplicationTests {
             printBit("bitmap-or", 8);
             return null;
         });
+
+        // BITPOS - 查找第一个指定位的位置
+        Long indexOfFirstOne = stringRedisTemplate.execute((RedisCallback<Long>) connection ->
+                connection.bitPos("bitmap1".getBytes(StandardCharsets.UTF_8), true)
+        );
+        System.out.println("bitmap1 indexOfFirstOne = " + indexOfFirstOne);
+        Long indexOfFirstZero = stringRedisTemplate.execute((RedisCallback<Long>) connection ->
+                connection.bitPos("bitmap1".getBytes(StandardCharsets.UTF_8), false)
+        );
+        System.out.println("bitmap1 indexOfFirstZero = " + indexOfFirstZero);
     }
 
     @Test
