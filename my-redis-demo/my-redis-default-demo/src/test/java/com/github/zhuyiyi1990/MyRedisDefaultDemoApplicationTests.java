@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.connection.RedisStringCommands;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.*;
@@ -155,7 +156,12 @@ class MyRedisDefaultDemoApplicationTests {
     void testBitmap() {
         stringRedisTemplate.delete("bitmap1");
         stringRedisTemplate.delete("bitmap2");
+        stringRedisTemplate.delete("bitmap-and");
+        stringRedisTemplate.delete("bitmap-or");
+
         ValueOperations<String, String> valueOperations = stringRedisTemplate.opsForValue();
+
+        // SETBIT - 设置位的值
         valueOperations.setBit("bitmap1", 2, true);
         valueOperations.setBit("bitmap1", 3, true);
         valueOperations.setBit("bitmap1", 4, true);
@@ -164,17 +170,13 @@ class MyRedisDefaultDemoApplicationTests {
         valueOperations.setBit("bitmap2", 1, true);
         valueOperations.setBit("bitmap2", 3, true);
         valueOperations.setBit("bitmap2", 6, true);
+
+        // GETBIT - 获取位的值
         for (int i = 1; i <= 2; i++) {
-            int num = 0;
-            for (int j = 0; j < 8; j++) {
-                Boolean bit = valueOperations.getBit("bitmap" + i, j);
-                if (Objects.equals(bit, Boolean.TRUE)) {
-                    num = num | (1 << j);
-                }
-            }
-            System.out.format("bitmap%d -> %s\n", i, String.format("%8s", Integer.toBinaryString(num)).replace(' ', '0'));
+            printBit("bitmap" + i, 8);
         }
 
+        // BITCOUNT - 统计值为1的位数
         Long count = stringRedisTemplate.execute((RedisCallback<Long>) connection ->
                 connection.bitCount("bitmap1".getBytes(StandardCharsets.UTF_8))
         );
@@ -183,11 +185,43 @@ class MyRedisDefaultDemoApplicationTests {
                 connection.bitCount("bitmap2".getBytes(StandardCharsets.UTF_8))
         );
         System.out.println("bitmap2 count = " + count);
+
+        // BITOP - 位运算
+        stringRedisTemplate.execute((RedisCallback<Void>) connection -> {
+            byte[][] srcBytes = new byte[2][];
+            srcBytes[0] = "bitmap1".getBytes(StandardCharsets.UTF_8);
+            srcBytes[1] = "bitmap2".getBytes(StandardCharsets.UTF_8);
+            connection.bitOp(
+                    RedisStringCommands.BitOperation.AND,
+                    "bitmap-and".getBytes(StandardCharsets.UTF_8),
+                    srcBytes
+            );
+            printBit("bitmap-and", 8);
+            connection.bitOp(
+                    RedisStringCommands.BitOperation.OR,
+                    "bitmap-or".getBytes(StandardCharsets.UTF_8),
+                    srcBytes
+            );
+            printBit("bitmap-or", 8);
+            return null;
+        });
     }
 
     @Test
     void testTransaction() {
         // TODO
+    }
+
+    void printBit(String key, int numOfBits) {
+        ValueOperations<String, String> valueOperations = stringRedisTemplate.opsForValue();
+        int num = 0;
+        for (int j = 0; j < numOfBits; j++) {
+            Boolean bit = valueOperations.getBit(key, j);
+            if (Objects.equals(bit, Boolean.TRUE)) {
+                num = num | (1 << j);
+            }
+        }
+        System.out.format("%s -> %s%n", key, String.format("%8s", Integer.toBinaryString(num)).replace(' ', '0'));
     }
 
 }
