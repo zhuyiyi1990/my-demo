@@ -47,4 +47,10 @@ public class MyRedisDefaultDemoController {
         return productService.getProductsByCategory(category, page, size);
     }
 
+    @GetMapping("/hotProducts")
+    public List<Product> getHotProducts(
+            @RequestParam String category) {
+        return productService.getHotProducts(category);
+    }
+
 }

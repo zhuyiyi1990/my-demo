@@ -25,7 +25,7 @@ public class ProductServiceImpl implements ProductService {
 
     // 使用方法名作为key的一部分
     @Override
-    @Cacheable(value = "products", key = "'hot_' + #category")
+    @Cacheable(value = "products", key = "#root.methodName + '_' + #category")
     public List<Product> getHotProducts(String category) {
         System.out.println("查询热门商品，分类：" + category);
         // 模拟查询逻辑
