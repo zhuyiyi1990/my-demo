@@ -12,13 +12,17 @@
 
     <name>my-rabbit-mq-demo</name>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
-
     <modules>
-        <module>my-rabbit-mq-demo-consumer</module>
         <module>my-rabbit-mq-demo-publisher</module>
+        <module>my-rabbit-mq-demo-consumer</module>
     </modules>
+
+    <dependencies>
+        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-amqp -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-amqp</artifactId>
+        </dependency>
+    </dependencies>
 
 </project>

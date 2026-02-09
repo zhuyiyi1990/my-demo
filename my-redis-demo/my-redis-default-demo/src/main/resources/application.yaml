@@ -2,7 +2,7 @@ spring:
   application:
     name: my-redis-default-demo
   redis:
-    host: 10.38.0.61
+    host: 192.168.248.100
     port: 6479
     database: 0
     password: password
