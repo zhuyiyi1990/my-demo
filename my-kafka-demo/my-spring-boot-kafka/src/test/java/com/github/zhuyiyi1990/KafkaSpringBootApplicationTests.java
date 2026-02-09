@@ -9,7 +9,7 @@ import org.springframework.kafka.core.KafkaOperations;
 import org.springframework.kafka.core.KafkaTemplate;
 
 @SpringBootTest(classes = {KafkaSpringBootApplication.class})
-public class KafkaTempolateTests {
+class KafkaSpringBootApplicationTests {
 
     @Autowired
     private KafkaTemplate kafkaTemplate;
@@ -18,12 +18,12 @@ public class KafkaTempolateTests {
     private IOrderService orderService;
 
     @Test
-    public void testOrderService() {
+    void testOrderService() {
         orderService.saveOrder("001", "order-001");
     }
 
     @Test
-    public void testKafkaTemplate() {
+    void testKafkaTemplate() {
         kafkaTemplate.executeInTransaction(new KafkaOperations.OperationsCallback() {
             @Override
             public Object doInOperations(KafkaOperations kafkaOperations) {

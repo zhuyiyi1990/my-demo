@@ -1,0 +1,30 @@
+spring:
+  kafka:
+    bootstrap-servers: 192.168.248.100:9092
+    producer:
+      retries: 5
+      acks: all
+      batch-size: 16384
+      buffer-memory: 33554432
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      properties:
+        enable.idempotence: true
+      transaction-id-prefix: transaction-id-
+    consumer:
+      group-id: group1
+      auto-offset-reset: earliest
+      enable-auto-commit: true
+      auto-commit-interval: 100
+      properties:
+        isolation.level: read_committed
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    streams:
+      application-id: wordcount_id
+      client-id: app1
+      auto-startup: true
+      state-dir: /Users/admin/Desktop/checkpoint
+      replication-factor: 1
+      properties:
+        processing.guarantee: exactly_once

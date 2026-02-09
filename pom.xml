@@ -12,6 +12,7 @@
         <module>my-redis-demo</module>
         <module>my-rabbit-mq-demo</module>
         <module>my-kafka-demo</module>
+        <module>my-elastic-search-demo</module>
     </modules>
 
     <properties>
