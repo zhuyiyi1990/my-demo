@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisStringCommands;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
@@ -11,10 +12,7 @@ import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactor
 import org.springframework.data.redis.core.*;
 
 import java.nio.charset.StandardCharsets;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @SpringBootTest
 class MyRedisDefaultDemoApplicationTests {
@@ -219,7 +217,32 @@ class MyRedisDefaultDemoApplicationTests {
 
     @Test
     void testTransaction() {
-        // TODO
+        final String key = "tx-key";
+        stringRedisTemplate.delete(key);
+        ValueOperations<String, String> valueOperations = stringRedisTemplate.opsForValue();
+        valueOperations.set(key, "1");
+        stringRedisTemplate.execute(new SessionCallback<List<Object>>() {
+            @Override
+            public <K, V> List<Object> execute(RedisOperations<K, V> operations) throws DataAccessException {
+                operations.watch((K) key);
+                try {
+                    // 可以这里在redis客户端执行set tx-key 2
+                    // 开启事务
+                    operations.multi();
+
+                    // 可以这里在redis客户端执行set tx-key 2
+                    // 执行多个操作
+                    operations.opsForValue().set((K) key, (V) "3");
+
+                    // 执行事务
+                    return operations.exec();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    operations.discard();
+                    throw new RuntimeException(e);
+                }
+            }
+        });
     }
 
     void printBit(String key, int numOfBits) {
