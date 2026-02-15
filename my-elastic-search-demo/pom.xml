@@ -8,8 +8,15 @@
     </parent>
 
     <artifactId>my-elastic-search-demo</artifactId>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
 
     <name>my-elastic-search-demo</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
+        </dependency>
+    </dependencies>
 
 </project>
