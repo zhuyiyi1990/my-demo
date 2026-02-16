@@ -17,6 +17,8 @@ import org.elasticsearch.action.get.GetRequest;
 import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
+import org.elasticsearch.action.search.SearchRequest;
+import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.support.master.AcknowledgedResponse;
 import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.action.update.UpdateResponse;
@@ -28,6 +30,18 @@ import org.elasticsearch.client.indices.CreateIndexRequest;
 import org.elasticsearch.client.indices.CreateIndexResponse;
 import org.elasticsearch.client.indices.GetIndexRequest;
 import org.elasticsearch.client.indices.GetIndexResponse;
+import org.elasticsearch.common.unit.Fuzziness;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.query.RangeQueryBuilder;
+import org.elasticsearch.index.query.TermsQueryBuilder;
+import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.SearchHits;
+import org.elasticsearch.search.aggregations.AggregationBuilder;
+import org.elasticsearch.search.aggregations.AggregationBuilders;
+import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
+import org.elasticsearch.search.sort.SortOrder;
 import org.elasticsearch.xcontent.XContentType;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -171,6 +185,12 @@ class MyElasticSearchDemoApplicationTests {
         request.add(new IndexRequest().index("user").id("1001").source(XContentType.JSON, "name", "zhangsan", "age", 30, "sex", "男"));
         request.add(new IndexRequest().index("user").id("1002").source(XContentType.JSON, "name", "lisi", "age", 30, "sex", "女"));
         request.add(new IndexRequest().index("user").id("1003").source(XContentType.JSON, "name", "wangwu", "age", 40, "sex", "男"));
+        request.add(new IndexRequest().index("user").id("1004").source(XContentType.JSON, "name", "wangwu1", "age", 40, "sex", "女"));
+        request.add(new IndexRequest().index("user").id("1005").source(XContentType.JSON, "name", "wangwu2", "age", 50, "sex", "男"));
+        request.add(new IndexRequest().index("user").id("1006").source(XContentType.JSON, "name", "wangwu3", "age", 50, "sex", "男"));
+        request.add(new IndexRequest().index("user").id("1007").source(XContentType.JSON, "name", "wangwu44", "age", 60, "sex", "男"));
+        request.add(new IndexRequest().index("user").id("1008").source(XContentType.JSON, "name", "wangwu555", "age", 60, "sex", "男"));
+        request.add(new IndexRequest().index("user").id("1009").source(XContentType.JSON, "name", "wangwu66666", "age", 60, "sex", "男"));
 
         BulkResponse response = esClient.bulk(request, RequestOptions.DEFAULT);
         System.out.println(response.getTook());
@@ -185,10 +205,285 @@ class MyElasticSearchDemoApplicationTests {
         request.add(new DeleteRequest().index("user").id("1001"));
         request.add(new DeleteRequest().index("user").id("1002"));
         request.add(new DeleteRequest().index("user").id("1003"));
+        request.add(new DeleteRequest().index("user").id("1004"));
+        request.add(new DeleteRequest().index("user").id("1005"));
+        request.add(new DeleteRequest().index("user").id("1006"));
+        request.add(new DeleteRequest().index("user").id("1007"));
+        request.add(new DeleteRequest().index("user").id("1008"));
+        request.add(new DeleteRequest().index("user").id("1009"));
 
         BulkResponse response = esClient.bulk(request, RequestOptions.DEFAULT);
         System.out.println(response.getTook());
         System.out.println(response.getItems());
+    }
+
+    @Test
+    void testMatchAllQuery() throws Exception {
+        // 查询索引中全部的数据
+        SearchRequest request = new SearchRequest();
+        request.indices("user");
+
+        request.source(new SearchSourceBuilder().query(QueryBuilders.matchAllQuery()));
+
+        SearchResponse response = esClient.search(request, RequestOptions.DEFAULT);
+
+        SearchHits hits = response.getHits();
+
+        System.out.println(hits.getTotalHits());
+        System.out.println(response.getTook());
+
+        for (SearchHit hit : hits) {
+            System.out.println(hit.getSourceAsString());
+        }
+    }
+
+    @Test
+    void testTermQuery() throws Exception {
+        // 条件查询 : termQuery
+        SearchRequest request = new SearchRequest();
+        request.indices("user");
+
+        request.source(new SearchSourceBuilder().query(QueryBuilders.termQuery("age", 30)));
+        SearchResponse response = esClient.search(request, RequestOptions.DEFAULT);
+
+        SearchHits hits = response.getHits();
+
+        System.out.println(hits.getTotalHits());
+        System.out.println(response.getTook());
+
+        for (SearchHit hit : hits) {
+            System.out.println(hit.getSourceAsString());
+        }
+    }
+
+    @Test
+    void testPage() throws Exception {
+        // 分页查询
+        SearchRequest request = new SearchRequest();
+        request.indices("user");
+
+        SearchSourceBuilder builder = new SearchSourceBuilder().query(QueryBuilders.matchAllQuery());
+        // (当前页码-1)*每页显示数据条数
+        // builder.from(0);
+        builder.from(2);
+        builder.size(2);
+        request.source(builder);
+        SearchResponse response = esClient.search(request, RequestOptions.DEFAULT);
+
+        SearchHits hits = response.getHits();
+
+        System.out.println(hits.getTotalHits());
+        System.out.println(response.getTook());
+
+        for (SearchHit hit : hits) {
+            System.out.println(hit.getSourceAsString());
+        }
+    }
+
+    @Test
+    void testOrder() throws Exception {
+        // 查询排序
+        SearchRequest request = new SearchRequest();
+        request.indices("user");
+
+        SearchSourceBuilder builder = new SearchSourceBuilder().query(QueryBuilders.matchAllQuery());
+
+        builder.sort("age", SortOrder.DESC);
+
+        request.source(builder);
+        SearchResponse response = esClient.search(request, RequestOptions.DEFAULT);
+
+        SearchHits hits = response.getHits();
+
+        System.out.println(hits.getTotalHits());
+        System.out.println(response.getTook());
+
+        for (SearchHit hit : hits) {
+            System.out.println(hit.getSourceAsString());
+        }
+    }
+
+    @Test
+    void testFilter() throws Exception {
+        // 过滤字段
+        SearchRequest request = new SearchRequest();
+        request.indices("user");
+
+        SearchSourceBuilder builder = new SearchSourceBuilder().query(QueryBuilders.matchAllQuery());
+
+        String[] excludes = {"age"};
+        String[] includes = {};
+        builder.fetchSource(includes, excludes);
+
+        request.source(builder);
+        SearchResponse response = esClient.search(request, RequestOptions.DEFAULT);
+
+        SearchHits hits = response.getHits();
+
+        System.out.println(hits.getTotalHits());
+        System.out.println(response.getTook());
+
+        for (SearchHit hit : hits) {
+            System.out.println(hit.getSourceAsString());
+        }
+    }
+
+    @Test
+    void testCombinedQuery() throws Exception {
+        // 组合查询
+        SearchRequest request = new SearchRequest();
+        request.indices("user");
+
+        SearchSourceBuilder builder = new SearchSourceBuilder();
+        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+
+        // boolQueryBuilder.must(QueryBuilders.matchQuery("age", 30));
+        // boolQueryBuilder.must(QueryBuilders.matchQuery("sex", "男"));
+        // boolQueryBuilder.mustNot(QueryBuilders.matchQuery("sex", "男"));
+        boolQueryBuilder.should(QueryBuilders.matchQuery("age", 30));
+        boolQueryBuilder.should(QueryBuilders.matchQuery("age", 40));
+
+        builder.query(boolQueryBuilder);
+
+        request.source(builder);
+        SearchResponse response = esClient.search(request, RequestOptions.DEFAULT);
+
+        SearchHits hits = response.getHits();
+
+        System.out.println(hits.getTotalHits());
+        System.out.println(response.getTook());
+
+        for (SearchHit hit : hits) {
+            System.out.println(hit.getSourceAsString());
+        }
+    }
+
+    @Test
+    void testRangeQuery() throws Exception {
+        // 范围查询
+        SearchRequest request = new SearchRequest();
+        request.indices("user");
+
+        SearchSourceBuilder builder = new SearchSourceBuilder();
+        RangeQueryBuilder rangeQuery = QueryBuilders.rangeQuery("age");
+
+        rangeQuery.gte(30);
+        rangeQuery.lt(50);
+
+        builder.query(rangeQuery);
+
+        request.source(builder);
+        SearchResponse response = esClient.search(request, RequestOptions.DEFAULT);
+
+        SearchHits hits = response.getHits();
+
+        System.out.println(hits.getTotalHits());
+        System.out.println(response.getTook());
+
+        for (SearchHit hit : hits) {
+            System.out.println(hit.getSourceAsString());
+        }
+    }
+
+    @Test
+    void testFuzzyQuery() throws Exception {
+        // 模糊查询
+        SearchRequest request = new SearchRequest();
+        request.indices("user");
+
+        SearchSourceBuilder builder = new SearchSourceBuilder();
+        // builder.query(QueryBuilders.fuzzyQuery("name", "wangwu").fuzziness(Fuzziness.ONE));
+        builder.query(QueryBuilders.fuzzyQuery("name", "wangwu").fuzziness(Fuzziness.TWO));
+
+        request.source(builder);
+        SearchResponse response = esClient.search(request, RequestOptions.DEFAULT);
+
+        SearchHits hits = response.getHits();
+
+        System.out.println(hits.getTotalHits());
+        System.out.println(response.getTook());
+
+        for (SearchHit hit : hits) {
+            System.out.println(hit.getSourceAsString());
+        }
+    }
+
+    @Test
+    void testHighlight() throws Exception {
+        // 高亮查询
+        SearchRequest request = new SearchRequest();
+        request.indices("user");
+
+        SearchSourceBuilder builder = new SearchSourceBuilder();
+        TermsQueryBuilder termsQueryBuilder = QueryBuilders.termsQuery("name", "zhangsan");
+
+        HighlightBuilder highlightBuilder = new HighlightBuilder();
+        highlightBuilder.preTags("<font color='red'>");
+        highlightBuilder.postTags("</font>");
+        highlightBuilder.field("name");
+
+        builder.highlighter(highlightBuilder);
+        builder.query(termsQueryBuilder);
+
+        request.source(builder);
+        SearchResponse response = esClient.search(request, RequestOptions.DEFAULT);
+
+        SearchHits hits = response.getHits();
+
+        System.out.println(hits.getTotalHits());
+        System.out.println(response.getTook());
+
+        for (SearchHit hit : hits) {
+            System.out.println(hit.getSourceAsString());
+        }
+    }
+
+    @Test
+    void testAggregation() throws Exception {
+        // 聚合查询
+        SearchRequest request = new SearchRequest();
+        request.indices("user");
+
+        SearchSourceBuilder builder = new SearchSourceBuilder();
+
+        AggregationBuilder aggregationBuilder = AggregationBuilders.max("maxAge").field("age");
+        builder.aggregation(aggregationBuilder);
+
+        request.source(builder);
+        SearchResponse response = esClient.search(request, RequestOptions.DEFAULT);
+
+        SearchHits hits = response.getHits();
+
+        System.out.println(hits.getTotalHits());
+        System.out.println(response.getTook());
+
+        for (SearchHit hit : hits) {
+            System.out.println(hit.getSourceAsString());
+        }
+    }
+
+    @Test
+    void testGroup() throws Exception {
+        // 分组查询
+        SearchRequest request = new SearchRequest();
+        request.indices("user");
+
+        SearchSourceBuilder builder = new SearchSourceBuilder();
+
+        AggregationBuilder aggregationBuilder = AggregationBuilders.terms("ageGroup").field("age");
+        builder.aggregation(aggregationBuilder);
+
+        request.source(builder);
+        SearchResponse response = esClient.search(request, RequestOptions.DEFAULT);
+
+        SearchHits hits = response.getHits();
+
+        System.out.println(hits.getTotalHits());
+        System.out.println(response.getTook());
+
+        for (SearchHit hit : hits) {
+            System.out.println(hit.getSourceAsString());
+        }
     }
 
 }

@@ -9,7 +9,7 @@
     </appender>
 
     <!-- 控制台输出日志级别 -->
-    <root level="INFO">
+    <root level="DEBUG">
         <appender-ref ref="STDOUT"/>
     </root>
 
