@@ -33,10 +33,7 @@ import org.elasticsearch.client.indices.CreateIndexResponse;
 import org.elasticsearch.client.indices.GetIndexRequest;
 import org.elasticsearch.client.indices.GetIndexResponse;
 import org.elasticsearch.common.unit.Fuzziness;
-import org.elasticsearch.index.query.BoolQueryBuilder;
-import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.index.query.RangeQueryBuilder;
-import org.elasticsearch.index.query.TermsQueryBuilder;
+import org.elasticsearch.index.query.*;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.aggregations.AggregationBuilder;
@@ -54,6 +51,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -592,6 +591,44 @@ class MyElasticSearchDemoApplicationTests {
         // 分页查询
         Page<Product> productPage = productDAO.findAll(pageRequest);
         for (Product product : productPage.getContent()) {
+            System.out.println(product);
+        }
+    }
+
+    /*
+     * term查询
+     * search(termQueryBuilder) 调用搜索方法，参数查询构建器对象
+     */
+    @Test
+    public void termQuery() {
+        TermQueryBuilder termQueryBuilder = QueryBuilders.termQuery("category", "手机");
+        NativeSearchQuery searchQuery = new NativeSearchQueryBuilder()
+                .withQuery(termQueryBuilder) // 设置查询条件
+                .build();
+        org.springframework.data.elasticsearch.core.SearchHits<Product> searchHits = elasticsearchRestTemplate.search(searchQuery, Product.class);
+        for (org.springframework.data.elasticsearch.core.SearchHit<Product> searchHit : searchHits) {
+            Product product = searchHit.getContent();
+            System.out.println(product);
+        }
+    }
+
+    /*
+     * term查询加分页
+     */
+    @Test
+    public void termQueryByPage() {
+        int currentPage = 0;
+        int pageSize = 5;
+        // 设置查询分页
+        PageRequest pageRequest = PageRequest.of(currentPage, pageSize);
+        TermQueryBuilder termQueryBuilder = QueryBuilders.termQuery("category", "手机");
+        NativeSearchQuery searchQuery = new NativeSearchQueryBuilder()
+                .withQuery(termQueryBuilder) // 设置查询条件
+                .withPageable(pageRequest) // 分页
+                .build();
+        org.springframework.data.elasticsearch.core.SearchHits<Product> searchHits = elasticsearchRestTemplate.search(searchQuery, Product.class);
+        for (org.springframework.data.elasticsearch.core.SearchHit<Product> searchHit : searchHits) {
+            Product product = searchHit.getContent();
             System.out.println(product);
         }
     }
