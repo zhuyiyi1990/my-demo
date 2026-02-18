@@ -1,6 +1,7 @@
 package com.github.zhuyiyi1990;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.zhuyiyi1990.pojo.Product;
 import com.github.zhuyiyi1990.pojo.User;
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
@@ -46,7 +47,9 @@ import org.elasticsearch.xcontent.XContentType;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 
 import java.util.Objects;
 
@@ -54,6 +57,9 @@ import java.util.Objects;
 class MyElasticSearchDemoApplicationTests {
 
     private RestHighLevelClient esClient;
+
+    @Autowired
+    private ElasticsearchRestTemplate elasticsearchRestTemplate;
 
     @BeforeEach
     void connect() {
@@ -484,6 +490,19 @@ class MyElasticSearchDemoApplicationTests {
         for (SearchHit hit : hits) {
             System.out.println(hit.getSourceAsString());
         }
+    }
+
+    @Test
+    public void testCreateIndexUsingSpringBoot() {
+        // 创建索引，系统初始化会自动创建索引
+        System.out.println("创建索引");
+    }
+
+    @Test
+    public void testDeleteIndexUsingSpringBoot() {
+        // 删除索引
+        boolean flg = elasticsearchRestTemplate.indexOps(Product.class).delete();
+        System.out.println("删除索引 = " + flg);
     }
 
 }
