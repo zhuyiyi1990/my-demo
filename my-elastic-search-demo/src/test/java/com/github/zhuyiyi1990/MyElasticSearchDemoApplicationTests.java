@@ -584,11 +584,11 @@ class MyElasticSearchDemoApplicationTests {
         // 设置排序(排序方式，正序还是倒序，排序的字段)
         Sort sort = Sort.by(Sort.Direction.DESC, "id");
         // 当前页，第一页从0开始，1表示第二页
-        int currentPage = 0;
+        int from = 0;
         // 每页显示多少条
-        int pageSize = 5;
+        int size = 5;
         // 设置查询分页
-        PageRequest pageRequest = PageRequest.of(currentPage, pageSize, sort);
+        PageRequest pageRequest = PageRequest.of(from, size, sort);
         // 分页查询
         Page<Product> productPage = productDAO.findAll(pageRequest);
         for (Product product : productPage.getContent()) {
