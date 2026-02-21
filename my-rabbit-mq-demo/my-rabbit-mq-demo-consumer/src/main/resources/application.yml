@@ -5,3 +5,7 @@ spring:
     username: guest
     password: guest
     virtual-host: /
+    listener:
+      simple:
+        acknowledge-mode: MANUAL # 把消息确认模式改为手动确认
+        prefetch: 1 # 设置每次最多从消息队列服务器取回多少消息

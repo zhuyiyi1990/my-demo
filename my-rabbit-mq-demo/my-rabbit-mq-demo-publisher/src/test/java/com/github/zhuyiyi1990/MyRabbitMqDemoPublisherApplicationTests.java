@@ -1,6 +1,8 @@
 package com.github.zhuyiyi1990;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.core.MessagePostProcessor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -45,6 +47,29 @@ public class MyRabbitMqDemoPublisherApplicationTests {
             Thread.sleep(10000);
         } catch (Exception e) {
         }
+    }
+
+    @Test
+    public void testSendMessageTTL() {
+        // 1、创建消息后置处理器对象
+        MessagePostProcessor messagePostProcessor = (Message message) -> {
+
+            // 设定 TTL 时间，以毫秒为单位
+            message.getMessageProperties().setExpiration("15000");
+
+            return message;
+        };
+
+        // 2、发送消息
+        // 规则：过期检查的时机。RabbitMQ只会检查队列头部的消息是否过期。这意味着，如果队列头部的消息未过期，即使排在后面的消息已经过了它的TTL时间，也不会被立即移除，必须等待前面的消息被消费或过期后，才会被检查和处理
+        rabbitTemplate.convertAndSend(
+                "my.timeout",
+                "my-timeout-queue",
+                "Hello timeout 1", messagePostProcessor);
+        rabbitTemplate.convertAndSend(
+                "my.timeout",
+                "my-timeout-queue",
+                "Hello timeout 2");
     }
 
 }

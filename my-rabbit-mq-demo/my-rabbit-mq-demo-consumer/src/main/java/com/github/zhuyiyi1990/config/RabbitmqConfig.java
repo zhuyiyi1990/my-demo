@@ -9,7 +9,8 @@ import org.springframework.context.annotation.Configuration;
 public class RabbitmqConfig {
 
     @Bean
-    protected Queue myDirectQueue() {
+    public Queue myDirectQueue() {
+        // return new Queue("my-direct-queue", true, false, false);
         return new Queue("my-direct-queue");
     }
 
@@ -34,7 +35,15 @@ public class RabbitmqConfig {
     }
 
     @Bean
+    public Queue myTimeoutQueue() {
+        Queue queue = new Queue("my-timeout-queue");
+        queue.addArgument("x-message-ttl", 30000);
+        return queue;
+    }
+
+    @Bean
     public DirectExchange myDirectExchange() {
+        // return new DirectExchange("amq.direct", true, false);
         return new DirectExchange("amq.direct");
     }
 
@@ -46,6 +55,11 @@ public class RabbitmqConfig {
     @Bean
     public TopicExchange myTopicExchange() {
         return new TopicExchange("amq.topic");
+    }
+
+    @Bean
+    public DirectExchange myTimeoutExchange() {
+        return new DirectExchange("my.timeout");
     }
 
     @Bean
@@ -72,6 +86,11 @@ public class RabbitmqConfig {
     public Binding topicBinding2(Queue myTopicQueue2, TopicExchange myTopicExchange) {
         // return BindingBuilder.bind(myTopicQueue2).to(myTopicExchange).with("com.github.zhuyiyi1990.a");
         return BindingBuilder.bind(myTopicQueue2).to(myTopicExchange).with("com.github.zhuyiyi1990.#");
+    }
+
+    @Bean
+    public Binding timeoutBinding(Queue myTimeoutQueue, DirectExchange myTimeoutExchange) {
+        return BindingBuilder.bind(myTimeoutQueue).to(myTimeoutExchange).with("my-timeout-queue");
     }
 
 }
