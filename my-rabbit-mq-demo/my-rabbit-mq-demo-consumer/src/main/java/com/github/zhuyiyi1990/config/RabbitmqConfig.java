@@ -34,6 +34,11 @@ public class RabbitmqConfig {
     }
 
     @Bean
+    public DirectExchange myDirectExchange() {
+        return new DirectExchange("amq.direct");
+    }
+
+    @Bean
     public FanoutExchange myFanoutExchange() {
         return new FanoutExchange("amq.fanout");
     }
@@ -44,12 +49,17 @@ public class RabbitmqConfig {
     }
 
     @Bean
-    public Binding binding(Queue myFanoutQueue1, FanoutExchange myFanoutExchange) {
+    public Binding directBinding(Queue myDirectQueue, DirectExchange myDirectExchange) {
+        return BindingBuilder.bind(myDirectQueue).to(myDirectExchange).with("my-direct-queue");
+    }
+
+    @Bean
+    public Binding fanoutBinding(Queue myFanoutQueue1, FanoutExchange myFanoutExchange) {
         return BindingBuilder.bind(myFanoutQueue1).to(myFanoutExchange);
     }
 
     @Bean
-    public Binding binding2(Queue myFanoutQueue2, FanoutExchange myFanoutExchange) {
+    public Binding fanoutBinding2(Queue myFanoutQueue2, FanoutExchange myFanoutExchange) {
         return BindingBuilder.bind(myFanoutQueue2).to(myFanoutExchange);
     }
 

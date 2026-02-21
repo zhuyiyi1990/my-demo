@@ -33,4 +33,18 @@ public class MyRabbitMqDemoPublisherApplicationTests {
         System.out.println("发送成功！");
     }
 
+    @Test
+    public void testAck() {
+        /*// 正确的交换机和正确的队列
+        rabbitTemplate.convertAndSend("amq.direct", "my-direct-queue", "Hello Ack");*/
+        /*// 错误的交换机
+        rabbitTemplate.convertAndSend("amq.direct~", "my-direct-queue", "Hello Ack");*/
+        // 正确的交换机和错误的队列
+        rabbitTemplate.convertAndSend("amq.direct", "my-direct-queue~", "Hello Ack");
+        try {
+            Thread.sleep(10000);
+        } catch (Exception e) {
+        }
+    }
+
 }
