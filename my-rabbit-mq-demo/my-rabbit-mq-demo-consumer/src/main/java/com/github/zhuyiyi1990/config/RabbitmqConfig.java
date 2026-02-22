@@ -55,6 +55,13 @@ public class RabbitmqConfig {
     }
 
     @Bean
+    public Queue myPriorityQueue() {
+        Queue queue = new Queue("my-priority-queue");
+        queue.addArgument("x-max-priority", 10);
+        return queue;
+    }
+
+    @Bean
     public DirectExchange myDirectExchange() {
         // return new DirectExchange("amq.direct", true, false);
         return new DirectExchange("amq.direct");
@@ -101,6 +108,11 @@ public class RabbitmqConfig {
     }
 
     @Bean
+    public DirectExchange myPriorityExchange() {
+        return new DirectExchange("my.priority");
+    }
+
+    @Bean
     public Binding directBinding(Queue myDirectQueue, DirectExchange myDirectExchange) {
         return BindingBuilder.bind(myDirectQueue).to(myDirectExchange).with("my-direct-queue");
     }
@@ -143,6 +155,11 @@ public class RabbitmqConfig {
     @Bean
     public Binding transactionBinding(Queue myTransactionQueue, DirectExchange myTransactionExchange) {
         return BindingBuilder.bind(myTransactionQueue).to(myTransactionExchange).with("my-transaction-queue");
+    }
+
+    @Bean
+    public Binding priorityBinding(Queue myPriorityQueue, DirectExchange myPriorityExchange) {
+        return BindingBuilder.bind(myPriorityQueue).to(myPriorityExchange).with("my-priority-queue");
     }
 
 }

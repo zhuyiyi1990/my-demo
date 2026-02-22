@@ -75,4 +75,10 @@ public class MyRabbitListener {
         channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);
     }
 
+    @RabbitListener(queues = "my-priority-queue")
+    public void demo8(String msg, Message message, Channel channel) throws Exception {
+        log.info(msg);
+        channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);
+    }
+
 }

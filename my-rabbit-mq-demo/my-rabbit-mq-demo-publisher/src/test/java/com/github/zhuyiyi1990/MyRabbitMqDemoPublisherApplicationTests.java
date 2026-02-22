@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 @SpringBootTest(classes = MyRabbitMqDemoPublisherApplication.class)
 public class MyRabbitMqDemoPublisherApplicationTests {
@@ -88,6 +89,24 @@ public class MyRabbitMqDemoPublisherApplicationTests {
 
                     return messageProcessor;
                 });
+    }
+
+    @Test
+    public void testSendPriorityMessage() throws Exception {
+        rabbitTemplate.convertAndSend("my.priority", "my-priority-queue", "I am a message with priority 1.", message -> {
+            message.getMessageProperties().setPriority(1);
+            return message;
+        });
+        TimeUnit.SECONDS.sleep(10);
+        rabbitTemplate.convertAndSend("my.priority", "my-priority-queue", "I am a message with priority 2.", message -> {
+            message.getMessageProperties().setPriority(2);
+            return message;
+        });
+        TimeUnit.SECONDS.sleep(10);
+        rabbitTemplate.convertAndSend("my.priority", "my-priority-queue", "I am a message with priority 3.", message -> {
+            message.getMessageProperties().setPriority(3);
+            return message;
+        });
     }
 
 }
