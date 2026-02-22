@@ -81,7 +81,7 @@ public class MyRabbitMqDemoPublisherApplicationTests {
         rabbitTemplate.convertAndSend(
                 "my.delayed",
                 "my-delayed-queue",
-                "测试基于插件的延迟消息 [" + new SimpleDateFormat("hh:mm:ss").format(new Date()) + "]",
+                "测试基于插件的延迟消息 [" + new SimpleDateFormat("HH:mm:ss").format(new Date()) + "]",
                 messageProcessor -> {
 
                     // 设置延迟时间：以毫秒为单位

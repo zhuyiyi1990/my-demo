@@ -71,7 +71,7 @@ public class MyRabbitListener {
     @RabbitListener(queues = "my-delayed-queue")
     public void demo7(String msg, Message message, Channel channel) throws Exception {
         log.info("[生产者]" + msg);
-        log.info("[消费者]" + new SimpleDateFormat("hh:mm:ss").format(new Date()));
+        log.info("[消费者]" + new SimpleDateFormat("HH:mm:ss").format(new Date()));
         channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);
     }
 
