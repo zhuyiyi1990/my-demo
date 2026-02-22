@@ -10,6 +10,7 @@
     </parent>
 
     <artifactId>my-rabbit-mq-demo-consumer</artifactId>
+    <packaging>jar</packaging>
 
     <name>my-rabbit-mq-demo-consumer</name>
 

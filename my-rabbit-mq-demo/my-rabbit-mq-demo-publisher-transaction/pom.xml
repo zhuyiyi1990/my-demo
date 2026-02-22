@@ -9,9 +9,9 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>my-rabbit-mq-demo-publisher</artifactId>
+    <artifactId>my-rabbit-mq-demo-publisher-transaction</artifactId>
     <packaging>jar</packaging>
 
-    <name>my-rabbit-mq-demo-publisher</name>
+    <name>my-rabbit-mq-demo-publisher-transaction</name>
 
 </project>

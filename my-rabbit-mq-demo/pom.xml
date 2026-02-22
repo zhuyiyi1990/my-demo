@@ -13,8 +13,9 @@
     <name>my-rabbit-mq-demo</name>
 
     <modules>
-        <module>my-rabbit-mq-demo-publisher</module>
         <module>my-rabbit-mq-demo-consumer</module>
+        <module>my-rabbit-mq-demo-publisher</module>
+        <module>my-rabbit-mq-demo-publisher-transaction</module>
     </modules>
 
     <dependencies>
