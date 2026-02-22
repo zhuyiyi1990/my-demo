@@ -7,6 +7,9 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 @SpringBootTest(classes = MyRabbitMqDemoPublisherApplication.class)
 public class MyRabbitMqDemoPublisherApplicationTests {
 
@@ -70,6 +73,21 @@ public class MyRabbitMqDemoPublisherApplicationTests {
                 "my.timeout",
                 "my-timeout-queue",
                 "Hello timeout 2");
+    }
+
+    @Test
+    public void testSendDelayMessage() {
+        rabbitTemplate.convertAndSend(
+                "my.delayed",
+                "my-delayed-queue",
+                "测试基于插件的延迟消息 [" + new SimpleDateFormat("hh:mm:ss").format(new Date()) + "]",
+                messageProcessor -> {
+
+                    // 设置延迟时间：以毫秒为单位
+                    messageProcessor.getMessageProperties().setHeader("x-delay", "10000");
+
+                    return messageProcessor;
+                });
     }
 
 }

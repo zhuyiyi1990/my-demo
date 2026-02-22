@@ -4,6 +4,9 @@ import org.springframework.amqp.core.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.HashMap;
+import java.util.Map;
+
 // 配置类放在消费者端（多实例不会多次创建）
 @Configuration
 public class RabbitmqConfig {
@@ -42,6 +45,11 @@ public class RabbitmqConfig {
     }
 
     @Bean
+    public Queue myDelayedQueue() {
+        return new Queue("my-delayed-queue");
+    }
+
+    @Bean
     public DirectExchange myDirectExchange() {
         // return new DirectExchange("amq.direct", true, false);
         return new DirectExchange("amq.direct");
@@ -60,6 +68,26 @@ public class RabbitmqConfig {
     @Bean
     public DirectExchange myTimeoutExchange() {
         return new DirectExchange("my.timeout");
+    }
+
+    @Bean
+    public CustomExchange myDelayedExchange() {
+        Map<String, Object> args = new HashMap<>();
+        // 关键配置：指定交换机类型为延迟插件支持的类型，并开启延迟功能
+        args.put("x-delayed-type", "direct");
+        /*
+         * 参数说明：
+         * 1. 交换机名称
+         * 2. 交换机类型，对于延迟插件，固定为 "x-delayed-message"
+         * 3. 是否持久化
+         * 4. 是否自动删除
+         * 5. 其他参数，这里传入包含 "x-delayed-type" 的Map
+         */
+        return new CustomExchange("my.delayed",
+                "x-delayed-message",
+                true,
+                false,
+                args);
     }
 
     @Bean
@@ -91,6 +119,15 @@ public class RabbitmqConfig {
     @Bean
     public Binding timeoutBinding(Queue myTimeoutQueue, DirectExchange myTimeoutExchange) {
         return BindingBuilder.bind(myTimeoutQueue).to(myTimeoutExchange).with("my-timeout-queue");
+    }
+
+    @Bean
+    public Binding delayedBinding(Queue myDelayedQueue, CustomExchange myDelayedExchange) {
+        // 将队列绑定到延迟交换机
+        return BindingBuilder.bind(myDelayedQueue)
+                .to(myDelayedExchange)
+                .with("my-delayed-queue")
+                .noargs();
     }
 
 }

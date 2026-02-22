@@ -1,11 +1,16 @@
 package com.github.zhuyiyi1990.listener;
 
 import com.rabbitmq.client.Channel;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 @Component
+@Slf4j
 public class MyRabbitListener {
 
     @RabbitListener(queues = "my-direct-queue")
@@ -61,6 +66,13 @@ public class MyRabbitListener {
     @RabbitListener(queues = "my-topic-queue-2")
     public void demo6(String msg, Message message, Channel channel) {
         System.out.println("topic2:" + msg);
+    }
+
+    @RabbitListener(queues = "my-delayed-queue")
+    public void demo7(String msg, Message message, Channel channel) throws Exception {
+        log.info("[生产者]" + msg);
+        log.info("[消费者]" + new SimpleDateFormat("hh:mm:ss").format(new Date()));
+        channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);
     }
 
 }
