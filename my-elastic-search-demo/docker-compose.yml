@@ -11,6 +11,7 @@ services:
       - "ES_JAVA_OPTS=-Xms256m -Xmx256m"
       - "ELASTIC_PASSWORD=password"
       - "xpack.security.enabled=true"
+      - TZ=Asia/Shanghai  # 可选：设置时区
     volumes:
       - /home/zhuyiyi/docker-volume/elasticsearch/plugins/:/usr/share/elasticsearch/plugins/
       - /home/zhuyiyi/docker-volume/elasticsearch/data/:/usr/share/elasticsearch/data/
@@ -31,6 +32,7 @@ services:
     environment:
       - LS_JAVA_OPTS=-Xms256m -Xmx256m
       - XPACK_MONITORING_ENABLED=false  # 禁用监控（可选）
+      - TZ=Asia/Shanghai  # 可选：设置时区
     depends_on:
       - elasticsearch
   kibana:
@@ -44,3 +46,4 @@ services:
       - "elasticsearch.hosts=http://elasticsearch:9200"
       - "ELASTICSEARCH_USERNAME=elastic"
       - "ELASTICSEARCH_PASSWORD=password"
+      - TZ=Asia/Shanghai  # 可选：设置时区
