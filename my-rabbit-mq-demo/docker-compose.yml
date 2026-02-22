@@ -6,6 +6,8 @@ services:
     ports:
       - 5672:5672
       - 15672:15672
+    volumes:
+      - /home/zhuyiyi/docker-volume/rabbitmq/plugins:/plugins
     environment:
       - RABBITMQ_DEFAULT_USER=guest
       - RABBITMQ_DEFAULT_PASS=guest
