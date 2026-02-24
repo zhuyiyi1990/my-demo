@@ -50,7 +50,7 @@ class MyRedisCustomDemoApplicationTests {
     @Test
     void testSaveObjectAsString() {
         ValueOperations<String, Object> valueOperations = redisTemplate.opsForValue();
-        valueOperations.set("user:1", new User("1", "朱一一", 18, new BigDecimal("5.43")));
+        valueOperations.set("user:1", new User(1L, "朱一一", 18, new BigDecimal("5.43"), "男", "user@example.com"));
         User user = (User) valueOperations.get("user:1");
         System.out.println("user = " + user);
     }
@@ -59,7 +59,7 @@ class MyRedisCustomDemoApplicationTests {
     @Test
     void testSaveObjectAsHash() {
         HashOperations<String, Object, Object> hashOperations = redisTemplate.opsForHash();
-        User user = new User("2", "朱一一", 18, new BigDecimal("5.43"));
+        User user = new User(2L, "朱一一", 18, new BigDecimal("5.43"), "男", "user@example.com");
         ObjectMapper mapper = new ObjectMapper();
         Map<String, Object> map = mapper.convertValue(user, Map.class);
         hashOperations.putAll("user:2", map);

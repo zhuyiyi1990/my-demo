@@ -9,6 +9,7 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <modules>
+        <module>my-demo-commons</module>
         <module>my-redis-demo</module>
         <module>my-rabbit-mq-demo</module>
         <module>my-kafka-demo</module>

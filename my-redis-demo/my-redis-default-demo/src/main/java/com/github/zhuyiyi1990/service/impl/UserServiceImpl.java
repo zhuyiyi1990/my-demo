@@ -6,6 +6,8 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -15,7 +17,7 @@ public class UserServiceImpl implements UserService {
     public User getUserById(Long id) {
         // 模拟从数据库查询
         System.out.println("查询数据库，用户ID：" + id);
-        return new User(id, "用户" + id, "user@example.com");
+        return new User(id, "用户" + id, 18, new BigDecimal("5.43"), "男", "user@example.com");
     }
 
     // 使用 condition 条件判断
@@ -24,7 +26,7 @@ public class UserServiceImpl implements UserService {
     public User getUserWithCondition(Long id) {
         // 只有当id大于10时才缓存
         System.out.println("查询数据库，用户ID：" + id);
-        return new User(id, "用户" + id, "user@example.com");
+        return new User(id, "用户" + id, 18, new BigDecimal("5.43"), "男", "user@example.com");
     }
 
     // 使用 unless 排除某些结果
@@ -36,7 +38,7 @@ public class UserServiceImpl implements UserService {
         if (id == 0) {
             return null;
         }
-        return new User(id, "用户" + id, "user@example.com");
+        return new User(id, "用户" + id, 18, new BigDecimal("5.43"), "男", "user@example.com");
     }
 
     // 删除指定key的缓存
