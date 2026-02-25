@@ -22,11 +22,6 @@ public class Product implements Serializable {
     private String name;
 
     /**
-     * 商品名称
-     */
-    private String title;
-
-    /**
      * 分类名称
      */
     private String category;

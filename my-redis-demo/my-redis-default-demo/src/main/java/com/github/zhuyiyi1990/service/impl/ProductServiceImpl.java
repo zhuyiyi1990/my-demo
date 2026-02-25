@@ -18,8 +18,8 @@ public class ProductServiceImpl implements ProductService {
         System.out.println("查询数据库，分类：" + category + ", 页码：" + page);
         // 模拟查询逻辑
         return Arrays.asList(
-                new Product(1L, "商品1", "商品1", category, 5.43, null),
-                new Product(2L, "商品2", "商品2", category, 5.43, null)
+                new Product(1L, "商品1", category, 5.43, null),
+                new Product(2L, "商品2", category, 5.43, null)
         );
     }
 
@@ -30,8 +30,8 @@ public class ProductServiceImpl implements ProductService {
         System.out.println("查询热门商品，分类：" + category);
         // 模拟查询逻辑
         return Arrays.asList(
-                new Product(1L, "热门商品1", "热门商品1", category, 5.43, null),
-                new Product(2L, "热门商品2", "热门商品2", category, 5.43, null)
+                new Product(1L, "热门商品1", category, 5.43, null),
+                new Product(2L, "热门商品2", category, 5.43, null)
         );
     }
 

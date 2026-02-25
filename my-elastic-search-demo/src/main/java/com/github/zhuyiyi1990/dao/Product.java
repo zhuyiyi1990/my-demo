@@ -11,6 +11,7 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import java.io.Serializable;
 
+// 参考com.github.zhuyiyi1990.pojo.Product
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
@@ -29,12 +30,6 @@ public class Product implements Serializable {
      */
     @Field(type = FieldType.Text)
     private String name;
-
-    /**
-     * 商品名称
-     */
-    @Field(type = FieldType.Text)
-    private String title;
 
     /**
      * 分类名称

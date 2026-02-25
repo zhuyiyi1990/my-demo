@@ -518,7 +518,7 @@ class MyElasticSearchDemoApplicationTests {
     void testSave() {
         Product product = new Product();
         product.setId(2L);
-        product.setTitle("华为手机");
+        product.setName("华为手机");
         product.setCategory("手机");
         product.setPrice(2999.0);
         product.setImages("http://www.atguigu.com/hw.jpg");
@@ -530,7 +530,7 @@ class MyElasticSearchDemoApplicationTests {
     void testUpdate() {
         Product product = new Product();
         product.setId(2L);
-        product.setTitle("小米2手机");
+        product.setName("小米2手机");
         product.setCategory("手机");
         product.setPrice(9999.0);
         product.setImages("http://www.atguigu.com/xm.jpg");
@@ -568,7 +568,7 @@ class MyElasticSearchDemoApplicationTests {
         for (int i = 0; i < 10; i++) {
             Product product = new Product();
             product.setId((long) i);
-            product.setTitle("[" + i + "]小米手机");
+            product.setName("[" + i + "]小米手机");
             product.setCategory("手机");
             product.setPrice(1999.0 + i);
             product.setImages("http://www.atguigu.com/xm.jpg");
