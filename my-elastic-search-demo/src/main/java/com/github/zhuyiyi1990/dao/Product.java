@@ -1,4 +1,4 @@
-package com.github.zhuyiyi1990.pojo;
+package com.github.zhuyiyi1990.dao;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,18 +9,26 @@ import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
-@Data
+import java.io.Serializable;
+
 @NoArgsConstructor
 @AllArgsConstructor
+@Data
 @ToString
 @Document(indexName = "product", shards = 3, replicas = 1)
-public class Product {
+public class Product implements Serializable {
 
     /**
      * 商品唯一标识
      */
     @Id
     private Long id;
+
+    /**
+     * 商品名称
+     */
+    @Field(type = FieldType.Text)
+    private String name;
 
     /**
      * 商品名称

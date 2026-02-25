@@ -6,9 +6,9 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Data
 public class Order implements Serializable {
 
     private Long id;

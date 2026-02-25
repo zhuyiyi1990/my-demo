@@ -1,8 +1,8 @@
 package com.github.zhuyiyi1990;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.zhuyiyi1990.dao.Product;
 import com.github.zhuyiyi1990.dao.ProductDAO;
-import com.github.zhuyiyi1990.pojo.Product;
 import com.github.zhuyiyi1990.pojo.User;
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;

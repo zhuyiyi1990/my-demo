@@ -6,15 +6,39 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Data
 public class Product implements Serializable {
 
+    /**
+     * 商品唯一标识
+     */
     private Long id;
 
+    /**
+     * 商品名称
+     */
     private String name;
 
+    /**
+     * 商品名称
+     */
+    private String title;
+
+    /**
+     * 分类名称
+     */
     private String category;
+
+    /**
+     * 商品价格
+     */
+    private Double price;
+
+    /**
+     * 图片地址
+     */
+    private String images;
 
 }
