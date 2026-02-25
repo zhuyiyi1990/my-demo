@@ -1,5 +1,6 @@
 package com.github.zhuyiyi1990;
 
+import com.github.zhuyiyi1990.pojo.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessagePostProcessor;
@@ -7,6 +8,7 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -107,6 +109,11 @@ public class MyRabbitMqDemoPublisherApplicationTests {
             message.getMessageProperties().setPriority(3);
             return message;
         });
+    }
+
+    @Test
+    public void testSendObject() {
+        rabbitTemplate.convertAndSend("my.object", "my-object-queue", new User(1L, "测试发送对象", 18, new BigDecimal("5.43"), "男", "user@example.com"));
     }
 
 }

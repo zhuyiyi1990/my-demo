@@ -62,6 +62,11 @@ public class RabbitmqConfig {
     }
 
     @Bean
+    public Queue myObjectQueue() {
+        return new Queue("my-object-queue");
+    }
+
+    @Bean
     public DirectExchange myDirectExchange() {
         // return new DirectExchange("amq.direct", true, false);
         return new DirectExchange("amq.direct");
@@ -113,6 +118,11 @@ public class RabbitmqConfig {
     }
 
     @Bean
+    public DirectExchange myObjectExchange() {
+        return new DirectExchange("my.object");
+    }
+
+    @Bean
     public Binding directBinding(Queue myDirectQueue, DirectExchange myDirectExchange) {
         return BindingBuilder.bind(myDirectQueue).to(myDirectExchange).with("my-direct-queue");
     }
@@ -160,6 +170,11 @@ public class RabbitmqConfig {
     @Bean
     public Binding priorityBinding(Queue myPriorityQueue, DirectExchange myPriorityExchange) {
         return BindingBuilder.bind(myPriorityQueue).to(myPriorityExchange).with("my-priority-queue");
+    }
+
+    @Bean
+    public Binding objectBinding(Queue myObjectQueue, DirectExchange myObjectExchange) {
+        return BindingBuilder.bind(myObjectQueue).to(myObjectExchange).with("my-object-queue");
     }
 
 }
