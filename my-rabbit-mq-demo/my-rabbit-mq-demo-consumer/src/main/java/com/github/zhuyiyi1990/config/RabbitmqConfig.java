@@ -61,6 +61,14 @@ public class RabbitmqConfig {
         return queue;
     }
 
+    // rabbitmq集群使用的仲裁队列
+    @Bean
+    public Queue myQuorumQueue() {
+        Queue queue = new Queue("my-quorum-queue");
+        queue.addArgument("x-queue-type", "quorum"); // 设置队列类型为仲裁队列
+        return queue;
+    }
+
     @Bean
     public Queue myObjectQueue() {
         return new Queue("my-object-queue");
