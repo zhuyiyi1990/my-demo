@@ -13,12 +13,17 @@
     <name>my-kafka-demo</name>
 
     <modules>
+        <module>my-kafka-demo-consumer</module>
+        <module>my-kafka-demo-producer</module>
         <module>my-kafka-message</module>
         <module>my-spring-boot-kafka</module>
-        <module>my-kafka-demo-producer</module>
     </modules>
 
     <dependencies>
+        <dependency>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>kafka-streams</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.springframework.kafka</groupId>
             <artifactId>spring-kafka</artifactId>

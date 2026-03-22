@@ -27,7 +27,7 @@ public class KafkaProducerTest {
         // 准备数据,定义泛型
         // 构造对象时需要传递 【Topic主题名称】，【Key】，【Value】三个参数
         ProducerRecord<String, String> record = new ProducerRecord<>(
-                "test", "key2", "value2"
+                "test", "key1", "value1"
         );
         // 生产（发送）数据
         producer.send(record);
