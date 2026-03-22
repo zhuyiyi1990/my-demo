@@ -12,3 +12,4 @@ services:
     command: redis-server /etc/redis/redis.conf
     environment:
       - TZ=Asia/Shanghai  # 可选：设置时区
+    restart: unless-stopped

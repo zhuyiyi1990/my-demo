@@ -5,6 +5,7 @@ services:
     container_name: rmqnamesrv
     ports:
       - 9876:9876
+    restart: unless-stopped
     networks:
       - rocketmq
     command: sh mqnamesrv
@@ -19,6 +20,7 @@ services:
       - NAMESRV_ADDR=rmqnamesrv:9876
     depends_on:
       - namesrv
+    restart: unless-stopped
     networks:
       - rocketmq
     command: sh mqbroker
