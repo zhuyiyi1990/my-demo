@@ -1,4 +1,4 @@
-package com.github.zhuyiyi1990;
+package com.github.zhuyiyi1990.consumer;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;

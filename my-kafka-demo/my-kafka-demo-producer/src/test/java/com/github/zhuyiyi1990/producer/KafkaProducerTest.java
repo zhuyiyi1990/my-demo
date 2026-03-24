@@ -1,4 +1,4 @@
-package com.github.zhuyiyi1990;
+package com.github.zhuyiyi1990.producer;
 
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
