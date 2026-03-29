@@ -8,7 +8,7 @@ import org.apache.kafka.common.serialization.StringSerializer;
 import java.util.HashMap;
 import java.util.Map;
 
-public class KafkaProducerIdemTest {
+public class KafkaProducerTransactionTest {
 
     public static void main(String[] args) {
         // 创建配置对象
@@ -22,17 +22,36 @@ public class KafkaProducerIdemTest {
         configMap.put(ProducerConfig.RETRIES_CONFIG, 5);
         configMap.put(ProducerConfig.BATCH_SIZE_CONFIG, 5);
         configMap.put(ProducerConfig.REQUEST_TIMEOUT_MS_CONFIG, 3000);
+        // 事务ID，事务是基于幂等性操作
+        configMap.put(ProducerConfig.TRANSACTIONAL_ID_CONFIG, "my-tx-id");
 
         KafkaProducer<String, String> producer = new KafkaProducer<>(configMap);
-
-        for (int i = 0; i < 10; i++) {
-            ProducerRecord<String, String> record = new ProducerRecord<>(
-                    "test", "key" + i, "value" + i
-            );
-            producer.send(record);
+        System.out.println("创建生产者对象");
+        // 初始化事务
+        producer.initTransactions();
+        System.out.println("初始化事务");
+        try {
+            // 开启事务
+            producer.beginTransaction();
+            System.out.println("开启事务");
+            for (int i = 0; i < 10; i++) {
+                ProducerRecord<String, String> record = new ProducerRecord<>(
+                        "test", "key" + i, "value" + i
+                );
+                producer.send(record);
+            }
+            System.out.println("生产数据完毕");
+            // 提交事务
+            producer.commitTransaction();
+            System.out.println("提交事务");
+        } catch (Exception e) {
+            e.printStackTrace();
+            // 中止事务
+            producer.abortTransaction();
+            System.out.println("中止事务");
+        } finally {
+            producer.close();
         }
-
-        producer.close();
     }
 
 }

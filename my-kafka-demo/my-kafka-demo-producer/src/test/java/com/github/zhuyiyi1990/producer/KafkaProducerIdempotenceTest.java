@@ -8,7 +8,7 @@ import org.apache.kafka.common.serialization.StringSerializer;
 import java.util.HashMap;
 import java.util.Map;
 
-public class KafkaProducerRetryTest {
+public class KafkaProducerIdempotenceTest {
 
     public static void main(String[] args) {
         // 创建配置对象
@@ -17,10 +17,10 @@ public class KafkaProducerRetryTest {
         // 对生产的数据K, V进行序列化的操作
         configMap.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         configMap.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
-        configMap.put(ProducerConfig.ACKS_CONFIG, "1");
+        configMap.put(ProducerConfig.ACKS_CONFIG, "-1");
+        configMap.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, true);
         configMap.put(ProducerConfig.RETRIES_CONFIG, 5);
         configMap.put(ProducerConfig.BATCH_SIZE_CONFIG, 5);
-        // 修改参数，使产生超时导致重复生产数据的效果，需要使用幂等性操作解决，可看KafkaProducerIdempotenceTest
         configMap.put(ProducerConfig.REQUEST_TIMEOUT_MS_CONFIG, 3000);
 
         KafkaProducer<String, String> producer = new KafkaProducer<>(configMap);
