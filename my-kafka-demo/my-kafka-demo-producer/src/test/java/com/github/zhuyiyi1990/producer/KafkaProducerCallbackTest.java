@@ -33,8 +33,8 @@ public class KafkaProducerCallbackTest {
                     System.out.println("发送成功：" + metadata);
                 }
             });
-            // 可将异步发送变成同步发送，只有kafka成功接收一条数据后再发下一条数据
-            result.get();
+            /*// 可将异步发送变成同步发送，只有kafka成功接收一条数据后再发下一条数据
+            result.get();*/
         }
         // 关闭生产者连接
         producer.close();
