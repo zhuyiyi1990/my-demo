@@ -6,7 +6,7 @@ import org.apache.kafka.clients.producer.RecordMetadata;
 
 import java.util.Map;
 
-public class ValueInterceptor implements ProducerInterceptor<String, String> {
+public class MyKafkaProducerValueInterceptor implements ProducerInterceptor<String, String> {
 
     @Override
     public ProducerRecord<String, String> onSend(ProducerRecord<String, String> producerRecord) {

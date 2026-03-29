@@ -4,6 +4,7 @@ import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.kafka.common.serialization.StringDeserializer;
 
 import java.time.Duration;
 import java.util.Collections;
@@ -18,12 +19,8 @@ public class KafkaConsumerTest {
         // 配置属性：Kafka集群地址
         configMap.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "192.168.58.100:9094");
         // 配置属性: Kafka传输的数据为KV对，所以需要对获取的数据分别进行反序列化
-        configMap.put(
-                ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG,
-                "org.apache.kafka.common.serialization.StringDeserializer");
-        configMap.put(
-                ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,
-                "org.apache.kafka.common.serialization.StringDeserializer");
+        configMap.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
+        configMap.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         // 配置属性: 读取数据的位置 ，取值为earliest（最早），latest（最晚）
         configMap.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         // 配置属性: 消费者组
