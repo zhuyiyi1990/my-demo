@@ -29,6 +29,8 @@ public class KafkaConsumerCommitTest {
         configMap.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         // 配置属性: 自动提交偏移量
         configMap.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false);
+
+        // 创建消费者对象
         KafkaConsumer<String, String> consumer = new KafkaConsumer<>(configMap);
         // 消费者订阅指定主题的数据
         consumer.subscribe(Collections.singletonList("test"));

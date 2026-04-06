@@ -25,9 +25,12 @@ public class KafkaConsumerTest {
         configMap.put(ConsumerConfig.GROUP_ID_CONFIG, "atguigu");
         // 事务隔离级别：read_uncommitted、read_committed
         configMap.put(ConsumerConfig.ISOLATION_LEVEL_CONFIG, "read_committed");
+
+        // 创建消费者对象
         KafkaConsumer<String, String> consumer = new KafkaConsumer<>(configMap);
         // 消费者订阅指定主题的数据
         consumer.subscribe(Collections.singletonList("test"));
+
         while (true) {
             // 每隔100毫秒，抓取一次数据
             ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100));
