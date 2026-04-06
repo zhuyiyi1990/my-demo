@@ -1,9 +1,6 @@
 package com.github.zhuyiyi1990.consumer;
 
-import org.apache.kafka.clients.consumer.ConsumerConfig;
-import org.apache.kafka.clients.consumer.ConsumerRecord;
-import org.apache.kafka.clients.consumer.ConsumerRecords;
-import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.kafka.clients.consumer.*;
 import org.apache.kafka.common.serialization.StringDeserializer;
 
 import java.time.Duration;
@@ -23,11 +20,15 @@ public class KafkaConsumerGroup2Test {
         configMap.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         // 配置属性: 消费者组
         configMap.put(ConsumerConfig.GROUP_ID_CONFIG, "atguigu");
+        configMap.put(ConsumerConfig.GROUP_INSTANCE_ID_CONFIG, "bbb");
+        // configMap.put(ConsumerConfig.PARTITION_ASSIGNMENT_STRATEGY_CONFIG, RoundRobinAssignor.class.getName());
+        // configMap.put(ConsumerConfig.PARTITION_ASSIGNMENT_STRATEGY_CONFIG, RangeAssignor.class.getName());
+        configMap.put(ConsumerConfig.PARTITION_ASSIGNMENT_STRATEGY_CONFIG, StickyAssignor.class.getName());
 
         // 创建消费者对象
         KafkaConsumer<String, String> consumer = new KafkaConsumer<>(configMap);
         // 消费者订阅指定主题的数据
-        consumer.subscribe(Collections.singletonList("test"));
+        consumer.subscribe(Collections.singletonList("test2"));
 
         while (true) {
             ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100));
