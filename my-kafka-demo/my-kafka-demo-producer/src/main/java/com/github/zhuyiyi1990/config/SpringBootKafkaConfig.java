@@ -1,0 +1,9 @@
+package com.github.zhuyiyi1990.config;
+
+public class SpringBootKafkaConfig {
+
+    public static final String TOPIC_TEST = "test";
+
+    public static final String GROUP_ID = "test";
+
+}

@@ -1,0 +1,14 @@
+spring:
+  kafka:
+    bootstrap-servers: 192.168.58.100:9094
+    producer:
+      acks: all
+      batch-size: 16384
+      buffer-memory: 33554432
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      retries: 0
+    template:
+      default-topic: "test"
+server:
+  port: 9999
