@@ -1,0 +1,6 @@
+rocketmq的版本使用的是尚硅谷课程的相同版本
+【尚硅谷】RocketMQ教程丨深度掌握MQ消息中间件
+https://www.bilibili.com/video/BV1cf4y157sz
+
+docker compose文件来自rocketmq官网
+https://rocketmq.apache.org/zh/docs/4.x/quickstart/03quickstartWithDockercompose
