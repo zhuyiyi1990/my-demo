@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   namesrv:
-    image: apache/rocketmq:4.8.0
+    image: apache/rocketmq:4.9.7
     container_name: rmqnamesrv
     ports:
       - 9876:9876
@@ -12,7 +12,7 @@ services:
     command: sh mqnamesrv
 
   broker:
-    image: apache/rocketmq:4.8.0
+    image: apache/rocketmq:4.9.7
     container_name: rmqbroker
     ports:
       - 10909:10909
@@ -21,13 +21,13 @@ services:
     environment:
       - NAMESRV_ADDR=rmqnamesrv:9876
     volumes:
-      - /home/zhuyiyi/docker-volume/rocketmq/conf/broker.conf:/home/rocketmq/rocketmq-4.8.0/conf/broker.conf
+      - /home/zhuyiyi/docker-volume/rocketmq/conf/broker.conf:/home/rocketmq/rocketmq-4.9.7/conf/broker.conf
     depends_on:
       - namesrv
     restart: unless-stopped
     networks:
       - rocketmq
-    command: sh mqbroker -c /home/rocketmq/rocketmq-4.8.0/conf/broker.conf
+    command: sh mqbroker -c /home/rocketmq/rocketmq-4.9.7/conf/broker.conf
 
 networks:
   rocketmq:
