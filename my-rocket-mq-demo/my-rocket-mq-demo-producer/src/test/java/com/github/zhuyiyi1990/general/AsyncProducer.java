@@ -22,7 +22,7 @@ public class AsyncProducer {
         for (int i = 0; i < 100; i++) {
             byte[] body = ("Hi," + i).getBytes();
             try {
-                Message msg = new Message("myTopicA", "myTag", body);
+                Message msg = new Message("general-async-topic", "myTag", body);
                 // 异步发送。指定回调
                 producer.send(msg, new SendCallback() {
                     // 当producer接收到MQ发送来的ACK后就会触发该回调方法的执行

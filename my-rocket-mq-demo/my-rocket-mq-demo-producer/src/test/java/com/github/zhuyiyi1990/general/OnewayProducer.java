@@ -12,7 +12,7 @@ public class OnewayProducer {
 
         for (int i = 0; i < 10; i++) {
             byte[] body = ("Hi," + i).getBytes();
-            Message msg = new Message("single", "someTag", body);
+            Message msg = new Message("general-oneway-topic", "someTag", body);
             // 单向发送
             producer.sendOneway(msg);
         }

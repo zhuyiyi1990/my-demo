@@ -23,7 +23,7 @@ public class OrderedProducer {
             // 为了演示简单，使用整型数作为orderId
             Integer orderId = i;
             byte[] body = ("Hi," + i).getBytes();
-            Message msg = new Message("TopicA", "TagA", body);
+            Message msg = new Message("order-topic", "TagA", body);
             // 将orderId作为消息key
             msg.setKeys(orderId.toString());
             // send()的第三个参数值会传递给选择器的select()的第三个参数

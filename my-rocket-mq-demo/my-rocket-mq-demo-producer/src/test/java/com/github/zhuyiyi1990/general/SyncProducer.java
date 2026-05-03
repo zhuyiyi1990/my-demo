@@ -22,7 +22,7 @@ public class SyncProducer {
         // 生产并发送100条消息
         for (int i = 0; i < 100; i++) {
             byte[] body = ("Hi," + i).getBytes();
-            Message msg = new Message("someTopic", "someTag", body);
+            Message msg = new Message("general-sync-topic", "someTag", body);
             // 为消息指定key
             msg.setKeys("key-" + i);
             // 同步发送消息
