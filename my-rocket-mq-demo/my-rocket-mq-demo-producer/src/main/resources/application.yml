@@ -1,0 +1,8 @@
+rocketmq:
+  # 指定 NameServer 地址，多个地址用分号隔开
+  name-server: 192.168.58.100:9876
+  producer:
+    # 生产者分组，必填项
+    group: my-spring-boot-producer-group
+    # 发送超时时间，默认 3000 ms
+    send-message-timeout: 3000
